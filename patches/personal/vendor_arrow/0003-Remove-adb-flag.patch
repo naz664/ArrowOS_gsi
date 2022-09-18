@@ -1,0 +1,37 @@
+From 6c517c73261c0937a80750478fb764c48bb14524 Mon Sep 17 00:00:00 2001
+From: naz664 <nazimnavas145@gmail.com>
+Date: Sat, 17 Sep 2022 11:52:51 +0000
+Subject: [PATCH 3/3] Remove adb-flag
+
+Change-Id: I930e01486150f16dd3eeb8e286d13a31f80ae419
+---
+ config/common.mk | 2 ++
+ config/props.mk  | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/config/common.mk b/config/common.mk
+index 49f1ad7..8300991 100644
+--- a/config/common.mk
++++ b/config/common.mk
+@@ -104,3 +104,5 @@ include vendor/arrow/config/props.mk
+ 
+ # Sounds
+ include vendor/arrow/config/sounds.mk
++
++TARGET_NO_KERNEL_OVERRIDE := true
+diff --git a/config/props.mk b/config/props.mk
+index 8648346..04efb70 100644
+--- a/config/props.mk
++++ b/config/props.mk
+@@ -58,7 +58,7 @@ ifeq ($(TARGET_BUILD_VARIANT),eng)
+ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += ro.adb.secure=0
+ else
+ # Enable ADB authentication
+-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += ro.adb.secure=1
++#PRODUCT_SYSTEM_DEFAULT_PROPERTIES += ro.adb.secure=1
+ 
+ # Disable extra StrictMode features on all non-engineering builds
+ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += persist.sys.strictmode.disable=true
+-- 
+2.25.1
+

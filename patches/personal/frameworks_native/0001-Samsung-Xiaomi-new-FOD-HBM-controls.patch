@@ -1,0 +1,133 @@
+From 8d61b74bb6b6a48c0eafda814bdbfb726048a06a Mon Sep 17 00:00:00 2001
+From: naz664 <nazimnavas145@gmail.com>
+Date: Sat, 17 Sep 2022 12:11:25 +0000
+Subject: [PATCH] Samsung-Xiaomi-new-FOD-HBM-controls
+
+Change-Id: I6fdb077c340279b11d6346b55d2e720c7071b599
+---
+ services/surfaceflinger/BufferQueueLayer.cpp  | 23 +++++++-----
+ .../CompositionEngine/src/OutputLayer.cpp     | 36 +++++++++++++++++++
+ 2 files changed, 51 insertions(+), 8 deletions(-)
+
+diff --git a/services/surfaceflinger/BufferQueueLayer.cpp b/services/surfaceflinger/BufferQueueLayer.cpp
+index 8c404aca3a..2778f6137d 100644
+--- a/services/surfaceflinger/BufferQueueLayer.cpp
++++ b/services/surfaceflinger/BufferQueueLayer.cpp
+@@ -28,14 +28,20 @@
+ #include <compositionengine/UdfpsExtension.h>
+ #include <gui/BufferQueueConsumer.h>
+ #include <system/window.h>
+-
++#include <cutils/properties.h>
+ #include "LayerRejecter.h"
+ #include "SurfaceInterceptor.h"
+ 
+ #include "FrameTracer/FrameTracer.h"
+ #include "Scheduler/LayerHistory.h"
+ #include "TimeStats/TimeStats.h"
+-
++static bool sCheckedProps = false;
++static bool sSamsungFod = false;
++static void init_fod_props() {
++    if(sCheckedProps) return;
++    sCheckedProps = true;
++    sSamsungFod = property_get_bool("persist.sys.phh.fod.samsung", false);
++}
+ namespace android {
+ using PresentState = frametimeline::SurfaceFrame::PresentState;
+ 
+@@ -506,6 +512,7 @@ void BufferQueueLayer::onFirstRef() {
+     mConsumer =
+             mFlinger->getFactory().createBufferLayerConsumer(consumer, mFlinger->getRenderEngine(),
+                                                              mTextureName, this);
++    init_fod_props();
+     mConsumer->setConsumerUsageBits(getEffectiveUsage(0));
+ 
+     mContentsChangedListener = new ContentsChangedListener(this);
+@@ -522,16 +529,16 @@ status_t BufferQueueLayer::setDefaultBufferProperties(uint32_t w, uint32_t h, Pi
+         ALOGE("dimensions too large %" PRIu32 " x %" PRIu32, w, h);
+         return BAD_VALUE;
+     }
+-    uint64_t usageBits = getEffectiveUsage(0);
+ 
+-    if (mName == UDFPS_LAYER_NAME || mName == UDFPS_BIOMETRIC_PROMPT_LAYER_NAME) {
+-        usageBits = getUdfpsUsageBits(usageBits, false);
+-    } else if (mName == UDFPS_TOUCHED_LAYER_NAME) {
+-        usageBits = getUdfpsUsageBits(usageBits, true);
+-    }
++    init_fod_props();
+ 
+     setDefaultBufferSize(w, h);
+     mConsumer->setDefaultBufferFormat(format);
++    uint64_t usageBits = getEffectiveUsage(0);
++    if(sSamsungFod && strstr(mName.c_str(), "Fingerprint on display.touched") != nullptr) {
++        ALOGE("Found on touched layer!");
++        usageBits |= 0x400000000LL;
++    }
+     mConsumer->setConsumerUsageBits(usageBits);
+ 
+     return NO_ERROR;
+diff --git a/services/surfaceflinger/CompositionEngine/src/OutputLayer.cpp b/services/surfaceflinger/CompositionEngine/src/OutputLayer.cpp
+index 87be750569..6029795245 100644
+--- a/services/surfaceflinger/CompositionEngine/src/OutputLayer.cpp
++++ b/services/surfaceflinger/CompositionEngine/src/OutputLayer.cpp
+@@ -25,6 +25,7 @@
+ #include <compositionengine/impl/OutputLayer.h>
+ #include <compositionengine/impl/OutputLayerCompositionState.h>
+ #include <cstdint>
++#include <cutils/properties.h>
+ 
+ // TODO(b/129481165): remove the #pragma below and fix conversion issues
+ #pragma clang diagnostic push
+@@ -35,6 +36,11 @@
+ // TODO(b/129481165): remove the #pragma below and fix conversion issues
+ #pragma clang diagnostic pop // ignored "-Wconversion"
+ 
++static bool sCheckedProps = false;
++static bool sBBKFod = false;
++static bool sXiaomiFod = false;
++static bool sAsusFod = false;
++
+ namespace android::compositionengine {
+ 
+ OutputLayer::~OutputLayer() = default;
+@@ -406,6 +412,36 @@ void OutputLayer::writeOutputDependentGeometryStateToHWC(HWC2::Layer* hwcLayer,
+               sourceCrop.bottom, to_string(error).c_str(), static_cast<int32_t>(error));
+     }
+ 
++    if(!sCheckedProps) {
++        sCheckedProps = true;
++        sBBKFod = property_get_bool("persist.sys.phh.fod.bbk", false);
++        sXiaomiFod = property_get_bool("persist.sys.phh.fod.xiaomi", false);
++        sAsusFod = property_get_bool("persist.sys.phh.fod.asus", false);
++    }
++
++    #define UDFPS_BIOMETRIC_PROMPT_LAYER_NAME "BiometricPrompt#0"
++    #define UDFPS_LAYER_NAME "UdfpsController#0"
++    #define UDFPS_TOUCHED_LAYER_NAME "SurfaceView[UdfpsController](BLAST)#0"
++    if ((strcmp(getLayerFE().getDebugName(), UDFPS_LAYER_NAME) == 0)
++            || (strcmp(getLayerFE().getDebugName(), UDFPS_BIOMETRIC_PROMPT_LAYER_NAME) == 0)) {
++        ALOGE("Found fingerprint on display!");
++        z = 0x41000031;
++        if(sBBKFod) {
++        } else if(sXiaomiFod) {
++            z |= 0x1000000;
++        } else if(sAsusFod) {
++        }
++    }
++
++    if (strcmp(getLayerFE().getDebugName(), UDFPS_TOUCHED_LAYER_NAME) == 0) {
++        ALOGE("Found fingerprint on display touched!");
++    if(sBBKFod) {
++            z = 0x41000033;
++        } else if(sXiaomiFod) {
++            z |= 0x2000000;
++        } else if(sAsusFod) {
++        }
++    }
+ 
+     uint32_t z_udfps = z;
+     if ((strcmp(getLayerFE().getDebugName(), UDFPS_LAYER_NAME) == 0)
+-- 
+2.25.1
+

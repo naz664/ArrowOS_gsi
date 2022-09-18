@@ -1,0 +1,89 @@
+From 556549f5cd302a01b6da6120c8269a72fb9f5426 Mon Sep 17 00:00:00 2001
+From: naz664 <nazimnavas145@gmail.com>
+Date: Sat, 17 Sep 2022 12:02:45 +0000
+Subject: [PATCH 1/2] Make-rounded-corners-padding-overridable-with-per.sys
+
+Change-Id: I37a22739c913ef375ee403748d77d969cb9e3d08
+---
+ .../src/com/android/systemui/qs/QuickStatusBarHeader.java  | 7 +++++--
+ .../systemui/statusbar/phone/KeyguardStatusBarView.java    | 7 +++++--
+ .../statusbar/phone/StatusBarContentInsetsProvider.kt      | 6 ++++--
+ 3 files changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/packages/SystemUI/src/com/android/systemui/qs/QuickStatusBarHeader.java b/packages/SystemUI/src/com/android/systemui/qs/QuickStatusBarHeader.java
+index 0045e511cc2d..bd2b25f7d7a9 100644
+--- a/packages/SystemUI/src/com/android/systemui/qs/QuickStatusBarHeader.java
++++ b/packages/SystemUI/src/com/android/systemui/qs/QuickStatusBarHeader.java
+@@ -23,6 +23,7 @@ import android.content.res.Configuration;
+ import android.content.res.Resources;
+ import android.graphics.Color;
+ import android.graphics.Rect;
++import android.os.SystemProperties;
+ import android.net.Uri;
+ import android.os.VibrationEffect;
+ import android.os.Vibrator;
+@@ -320,8 +321,10 @@ public class QuickStatusBarHeader extends FrameLayout implements TunerService.Tu
+ 
+         mConfigShowBatteryEstimate = resources.getBoolean(R.bool.config_showBatteryEstimateQSBH);
+ 
+-        mRoundedCornerPadding = resources.getDimensionPixelSize(
+-                R.dimen.rounded_corner_content_padding);
++         mRoundedCornerPadding = SystemProperties.getInt("persist.sys.phh.rounded_corners_padding", -1);
++        if(mRoundedCornerPadding == -1)
++            mRoundedCornerPadding = resources.getDimensionPixelSize(
++                    R.dimen.rounded_corner_content_padding);
+ 
+         mStatusBarPaddingStart = resources.getDimensionPixelSize(
+                 R.dimen.status_bar_padding_start);
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java b/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
+index f610029e5c16..087627ba36e1 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/KeyguardStatusBarView.java
+@@ -28,6 +28,7 @@ import android.graphics.Color;
+ import android.graphics.Rect;
+ import android.graphics.drawable.Drawable;
+ import android.os.UserManager;
++import android.os.SystemProperties;
+ import android.util.AttributeSet;
+ import android.util.Pair;
+ import android.util.TypedValue;
+@@ -177,8 +178,10 @@ public class KeyguardStatusBarView extends RelativeLayout {
+                 R.dimen.ongoing_appops_dot_min_padding);
+         mCutoutSideNudge = getResources().getDimensionPixelSize(
+                 R.dimen.display_cutout_margin_consumption);
+-        mRoundedCornerPadding = res.getDimensionPixelSize(
+-                R.dimen.rounded_corner_content_padding);
++        mRoundedCornerPadding = SystemProperties.getInt("persist.sys.phh.rounded_corners_padding", -1);
++        if(mRoundedCornerPadding == -1)
++            mRoundedCornerPadding = res.getDimensionPixelSize(
++                    R.dimen.rounded_corner_content_padding);
+     }
+ 
+     private void updateVisibilities() {
+diff --git a/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarContentInsetsProvider.kt b/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarContentInsetsProvider.kt
+index b7988bcc6f45..72b8e971306c 100644
+--- a/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarContentInsetsProvider.kt
++++ b/packages/SystemUI/src/com/android/systemui/statusbar/phone/StatusBarContentInsetsProvider.kt
+@@ -23,7 +23,7 @@ import android.graphics.Rect
+ import android.util.LruCache
+ import android.util.Pair
+ import android.view.DisplayCutout
+-
++import android.os.SystemProperties
+ import androidx.annotation.VisibleForTesting
+ 
+ import com.android.internal.policy.SystemBarUtils
+@@ -227,7 +227,9 @@ class StatusBarContentInsetsProvider @Inject constructor(
+         val dc = context.display.cutout
+         val currentRotation = getExactRotation(context)
+ 
+-        val roundedCornerPadding = rotatedResources
++        var roundedCornerPadding = SystemProperties.getInt("persist.sys.phh.rounded_corners_padding", -1);
++        if(roundedCornerPadding == -1)
++            roundedCornerPadding = rotatedResources
+                 .getDimensionPixelSize(R.dimen.rounded_corner_content_padding)
+         val minDotPadding = if (isPrivacyDotEnabled)
+                 rotatedResources.getDimensionPixelSize(R.dimen.ongoing_appops_dot_min_padding)
+-- 
+2.25.1
+

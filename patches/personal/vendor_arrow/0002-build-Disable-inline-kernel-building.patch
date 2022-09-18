@@ -1,0 +1,31 @@
+From e08fcb1ba34a10f1bd2cbbc07e8f960da06d2c54 Mon Sep 17 00:00:00 2001
+From: naz664 <nazimnavas145@gmail.com>
+Date: Sat, 17 Sep 2022 11:51:14 +0000
+Subject: [PATCH 2/3] build-Disable-inline-kernel-building
+
+Change-Id: I12a46993e03c1d453c92c1df848494d1b0277ae6
+---
+ build/tasks/kernel.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/build/tasks/kernel.mk b/build/tasks/kernel.mk
+index 2580c37..5f5cc4c 100644
+--- a/build/tasks/kernel.mk
++++ b/build/tasks/kernel.mk
+@@ -70,6 +70,7 @@
+ #                                          kernel sources are present
+ 
+ ifneq ($(TARGET_NO_KERNEL),true)
++ifneq ($(TARGET_NO_KERNEL_OVERRIDE),true)
+ 
+ ## Externally influenced variables
+ KERNEL_SRC := $(TARGET_KERNEL_SOURCE)
+@@ -513,4 +514,5 @@ dtboimage: $(INSTALLED_DTBOIMAGE_TARGET)
+ .PHONY: dtbimage
+ dtbimage: $(INSTALLED_DTBIMAGE_TARGET)
+ 
++endif # TARGET_NO_KERNEL_OVERRIDE
+ endif # TARGET_NO_KERNEL
+-- 
+2.25.1
+
