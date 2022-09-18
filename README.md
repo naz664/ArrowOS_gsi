@@ -1,5 +1,5 @@
-# crDroid_patches
-Patches for building crDroid gsi
+# ArrowOS_patches
+Patches for building ArrowOS gsi
 (WIP)
 
 ## Credits
@@ -12,4 +12,4 @@ These people have helped this project in some way or another, so they should be 
 - [ChonDoit](https://github.com/ChonDoit)
 
 
-# Download link :- [Click Here](https://sourceforge.net/projects/gsi-projects/files/v415-Sep/ArrowOS-12.1)
+# Download :- [Here](https://sourceforge.net/projects/gsi-projects/files/v415-Sep/ArrowOS-12.1)
