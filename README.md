@@ -1,6 +1,5 @@
 # ArrowOS_patches
 Patches for building ArrowOS gsi
-(WIP)
 
 ## Credits
 These people have helped this project in some way or another, so they should be the ones who receive all the credit:
@@ -12,4 +11,4 @@ These people have helped this project in some way or another, so they should be 
 - [ChonDoit](https://github.com/ChonDoit)
 
 
-# Download :- [Here](https://sourceforge.net/projects/gsi-projects/files/v415-Sep/ArrowOS-12.1)
+# Download :- [Here](https://sourceforge.net/projects/gsi-projects/files/A12.1/ArrowOS-12.1/19102022/)
