@@ -1,0 +1,103 @@
+From 48d9aa73f8d0da26d73ebf03a299a640227a0d39 Mon Sep 17 00:00:00 2001
+From: Parth Bhatia <parthbhatia98@gmail.com>
+Date: Wed, 6 May 2020 18:13:09 -0600
+Subject: [PATCH 2/3] Settings: Add simple maintainer string
+
+add ro.arrow.maintainer in your dt props.
+
+Change-Id: I93abddc09cc7d9629e737c43da3a7d31e00ed0ad
+(cherry picked from commit 1bb852fd93cc0322613d4c5d8d84d8a68c8d353f)
+Signed-off-by: saikiran2001 <bjsaikiran@gmail.com>
+---
+ res/values/arrow_strings.xml                  |  3 ++
+ res/xml/firmware_version.xml                  |  8 ++++
+ .../ArrowMaintainerPreferenceController.java  | 46 +++++++++++++++++++
+ 3 files changed, 57 insertions(+)
+ create mode 100644 src/com/android/settings/deviceinfo/arrow/ArrowMaintainerPreferenceController.java
+
+diff --git a/res/values/arrow_strings.xml b/res/values/arrow_strings.xml
+index 46d04f58d4..8a2e8adb54 100644
+--- a/res/values/arrow_strings.xml
++++ b/res/values/arrow_strings.xml
+@@ -170,4 +170,7 @@
+     <string name="volume_button_music_control_title">Playback control</string>
+     <string name="volume_button_music_control_summary">When the screen is off, long-pressing the volume keys will skip music tracks</string>
+ 
++    <!-- Arrow maintainer -->
++    <string name="maintainer">Maintainer</string>
++
+ </resources>
+diff --git a/res/xml/firmware_version.xml b/res/xml/firmware_version.xml
+index 09c390af09..84970eca28 100644
+--- a/res/xml/firmware_version.xml
++++ b/res/xml/firmware_version.xml
+@@ -53,6 +53,14 @@
+         settings:enableCopying="true"
+         settings:controller="com.android.settings.deviceinfo.firmwareversion.AboutDeviceNamePreferenceController"/>
+ 
++    <!-- Arrow maintainer -->
++    <Preference
++        android:key="maintainer"
++        android:title="@string/maintainer"
++        android:summary="@string/summary_placeholder"
++        settings:enableCopying="true"
++        settings:controller="com.android.settings.deviceinfo.arrow.ArrowMaintainerPreferenceController"/>
++
+     <!-- Security patch -->
+     <Preference
+         android:key="security_key"
+diff --git a/src/com/android/settings/deviceinfo/arrow/ArrowMaintainerPreferenceController.java b/src/com/android/settings/deviceinfo/arrow/ArrowMaintainerPreferenceController.java
+new file mode 100644
+index 0000000000..1092ed984f
+--- /dev/null
++++ b/src/com/android/settings/deviceinfo/arrow/ArrowMaintainerPreferenceController.java
+@@ -0,0 +1,46 @@
++/*
++ * Copyright (C) 2019 The LineageOS Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++
++package com.android.settings.deviceinfo.arrow;
++
++import android.content.Context;
++import android.os.SystemProperties;
++import android.text.TextUtils;
++
++import androidx.preference.Preference;
++
++import com.android.settings.R;
++import com.android.settings.core.BasePreferenceController;
++
++public class ArrowMaintainerPreferenceController extends BasePreferenceController {
++
++    private static final String TAG = "ArrowMaintainerPreferenceController";
++    private static final String ROM_PROPERTY = "ro.arrow.maintainer";
++
++    public ArrowMaintainerPreferenceController(Context context, String key) {
++        super(context, key);
++    }
++
++    public int getAvailabilityStatus() {
++        return AVAILABLE;
++    }
++
++    public CharSequence getSummary() {
++        String rom = SystemProperties.get(ROM_PROPERTY,
++                this.mContext.getString(R.string.device_info_default));
++        return rom;
++    }
++}
+-- 
+2.25.1
+
