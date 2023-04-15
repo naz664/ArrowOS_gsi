@@ -17,7 +17,7 @@ To do that, run these commands:
 ### To initialize your local repository, run this command:
 
 ```bash
-   repo init -u https://github.com/ArrowOS/android_manifest.git -b arrow-13.0
+   repo init -u https://github.com/ArrowOS/android_manifest.git -b arrow-13.1
 ```
  
 
