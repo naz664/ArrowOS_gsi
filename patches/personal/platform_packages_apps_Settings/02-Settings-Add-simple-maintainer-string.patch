@@ -1,7 +1,7 @@
-From 48d9aa73f8d0da26d73ebf03a299a640227a0d39 Mon Sep 17 00:00:00 2001
+From 5f6425f511e509750e95ae27fa0bf41fa7841465 Mon Sep 17 00:00:00 2001
 From: Parth Bhatia <parthbhatia98@gmail.com>
 Date: Wed, 6 May 2020 18:13:09 -0600
-Subject: [PATCH 2/3] Settings: Add simple maintainer string
+Subject: [PATCH] Settings: Add simple maintainer string
 
 add ro.arrow.maintainer in your dt props.
 
@@ -16,19 +16,19 @@ Signed-off-by: saikiran2001 <bjsaikiran@gmail.com>
  create mode 100644 src/com/android/settings/deviceinfo/arrow/ArrowMaintainerPreferenceController.java
 
 diff --git a/res/values/arrow_strings.xml b/res/values/arrow_strings.xml
-index 46d04f58d4..8a2e8adb54 100644
+index 07a955dc83..8a909ae80c 100644
 --- a/res/values/arrow_strings.xml
 +++ b/res/values/arrow_strings.xml
-@@ -170,4 +170,7 @@
-     <string name="volume_button_music_control_title">Playback control</string>
-     <string name="volume_button_music_control_summary">When the screen is off, long-pressing the volume keys will skip music tracks</string>
+@@ -224,4 +224,7 @@
+     <string name="dc_dimming_main_switch_title">Use DC Dimming</string>
+     <string name="keywords_display_dc_dimming">dc dimming, anti, flicker, eye, strain</string>
  
 +    <!-- Arrow maintainer -->
 +    <string name="maintainer">Maintainer</string>
 +
  </resources>
 diff --git a/res/xml/firmware_version.xml b/res/xml/firmware_version.xml
-index 09c390af09..84970eca28 100644
+index 18d09dafca..ccd10933c6 100644
 --- a/res/xml/firmware_version.xml
 +++ b/res/xml/firmware_version.xml
 @@ -53,6 +53,14 @@

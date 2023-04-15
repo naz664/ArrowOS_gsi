@@ -1,4 +1,4 @@
-From d26c3b219ad8818ef54b527755e3884cd6e87d9e Mon Sep 17 00:00:00 2001
+From f370b2aa165ed56ef649adffb5493f48be45d215 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Sat, 3 Dec 2022 17:13:24 -0500
 Subject: [PATCH 30/33] Set old fingerprint sensors to security "strong"
@@ -11,7 +11,7 @@ despite its name, config_biometric_sensors is HIDL-specific
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/services/core/java/com/android/server/biometrics/AuthService.java b/services/core/java/com/android/server/biometrics/AuthService.java
-index fffb445895a5..c39f80822b8c 100644
+index 951cf5769b28..1720ff94e1c3 100644
 --- a/services/core/java/com/android/server/biometrics/AuthService.java
 +++ b/services/core/java/com/android/server/biometrics/AuthService.java
 @@ -668,7 +668,7 @@ public class AuthService extends SystemService {

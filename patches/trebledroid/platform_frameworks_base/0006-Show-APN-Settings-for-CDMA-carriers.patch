@@ -1,4 +1,4 @@
-From b986af4a0a299309937659a55fba031c2ab92f16 Mon Sep 17 00:00:00 2001
+From 5508a6efc77bd0cea1c27dcff2e4bb27c23dddf9 Mon Sep 17 00:00:00 2001
 From: Pierre-Hugues Husson <phh@phh.me>
 Date: Mon, 6 Aug 2018 12:49:00 +0200
 Subject: [PATCH 06/33] Show APN Settings for CDMA carriers
@@ -8,10 +8,10 @@ Subject: [PATCH 06/33] Show APN Settings for CDMA carriers
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/telephony/java/android/telephony/CarrierConfigManager.java b/telephony/java/android/telephony/CarrierConfigManager.java
-index 2c879d0bc098..d1c761f6739f 100644
+index e76523cfdf17..e67abef5f9e9 100644
 --- a/telephony/java/android/telephony/CarrierConfigManager.java
 +++ b/telephony/java/android/telephony/CarrierConfigManager.java
-@@ -8686,7 +8686,7 @@ public class CarrierConfigManager {
+@@ -8712,7 +8712,7 @@ public class CarrierConfigManager {
          sDefaults.putBoolean(KEY_OPERATOR_SELECTION_EXPAND_BOOL, true);
          sDefaults.putBoolean(KEY_PREFER_2G_BOOL, false);
          sDefaults.putBoolean(KEY_4G_ONLY_BOOL, false);

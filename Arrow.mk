@@ -6,25 +6,14 @@ $(call inherit-product, device/arrow/sepolicy/common/sepolicy.mk)
 TARGET_NO_KERNEL_OVERRIDE := true
 TARGET_NO_KERNEL_IMAGE := true
 SELINUX_IGNORE_NEVERALLOWS := true
-TARGET_BOOT_ANIMATION_RES := 1080
 
 TARGET_USES_PREBUILT_VENDOR_SEPOLICY := true
 TARGET_HAS_FUSEBLK_SEPOLICY_ON_VENDOR := true
 
 ARROW_GAPPS := true
 
-TARGET_FACE_UNLOCK_SUPPORTED := true
-TARGET_BOOT_ANIMATION_RES := 1080
-
-#PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-#    ro.system.ota.json_url=https://raw.githubusercontent.com/naz664/ArrowOS_gsi/13/ota.json
-
-# Use CCache
-USE_CCACHE := true
-
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-        persist.sys.binary_xml=false \
-        dalvik.vm.dex2oat64.enabled=true \
+    ro.system.ota.json_url=https://raw.githubusercontent.com/naz664/ArrowOS_gsi/13/ota.json
 
 #prebuilts
 PRODUCT_PACKAGES += \
