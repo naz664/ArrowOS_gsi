@@ -1,0 +1,22 @@
+From 94a42e63fe2132bce31828795672ea5f2775bb97 Mon Sep 17 00:00:00 2001
+From: naz664 <nazimnavas145@gmail.com>
+Date: Fri, 30 Jun 2023 23:11:58 +0530
+Subject: [PATCH] treble: Add maintainer name
+
+---
+ system.prop | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/system.prop b/system.prop
+index fa2a5c9..94e636b 100644
+--- a/system.prop
++++ b/system.prop
+@@ -1,4 +1,5 @@
+ ro.adb.secure=0
++ro.arrow.maintainer=Nazim
+ #Some devices have sdcardfs kernel panicing on 8.0
+ #Disable for everyone for the moment
+ ro.sys.sdcardfs=0
+-- 
+2.17.1
+

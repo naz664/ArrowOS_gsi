@@ -1,7 +1,7 @@
-From 64a078733ca77682990ee10950fbd7d3ce899e82 Mon Sep 17 00:00:00 2001
+From b39525cde50ce8e1b4fccae372958c46767c0e1f Mon Sep 17 00:00:00 2001
 From: Alberto Ponces <ponces26@gmail.com>
 Date: Wed, 28 Sep 2022 17:04:03 +0100
-Subject: [PATCH 03/13] Revert "Remove support for AVB 1.0."
+Subject: [PATCH 03/18] Revert "Remove support for AVB 1.0."
 
 This reverts commit 21ef2310eb1ef4e61117b8a63741f3a9577a20c9.
 
@@ -21,7 +21,7 @@ This reverts commit ace7d45d0783d465d3dda4fa255e5280ff0c792f.
  create mode 100644 fs_mgr/fs_mgr_verity.cpp
 
 diff --git a/fs_mgr/Android.bp b/fs_mgr/Android.bp
-index 49761ac30..5872ddab6 100644
+index 652aa78737..9b62bebb96 100644
 --- a/fs_mgr/Android.bp
 +++ b/fs_mgr/Android.bp
 @@ -69,6 +69,7 @@ cc_defaults {
@@ -33,10 +33,10 @@ index 49761ac30..5872ddab6 100644
          "fs_mgr_overlayfs.cpp",
          "fs_mgr_roots.cpp",
 diff --git a/fs_mgr/fs_mgr.cpp b/fs_mgr/fs_mgr.cpp
-index 686389495..1acaea3cf 100644
+index d42576ff49..365144ed29 100644
 --- a/fs_mgr/fs_mgr.cpp
 +++ b/fs_mgr/fs_mgr.cpp
-@@ -1445,6 +1445,14 @@ MountAllResult fs_mgr_mount_all(Fstab* fstab, int mount_mode) {
+@@ -1447,6 +1447,14 @@ MountAllResult fs_mgr_mount_all(Fstab* fstab, int mount_mode) {
                  // Skips mounting the device.
                  continue;
              }
@@ -51,7 +51,7 @@ index 686389495..1acaea3cf 100644
          }
  
          int last_idx_inspected;
-@@ -1609,6 +1617,13 @@ int fs_mgr_umount_all(android::fs_mgr::Fstab* fstab) {
+@@ -1611,6 +1619,13 @@ int fs_mgr_umount_all(android::fs_mgr::Fstab* fstab) {
                  ret |= FsMgrUmountStatus::ERROR_VERITY;
                  continue;
              }
@@ -65,7 +65,7 @@ index 686389495..1acaea3cf 100644
          }
      }
      return ret;
-@@ -1905,6 +1920,14 @@ static int fs_mgr_do_mount_helper(Fstab* fstab, const std::string& n_name,
+@@ -1907,6 +1922,14 @@ static int fs_mgr_do_mount_helper(Fstab* fstab, const std::string& n_name,
                  // Skips mounting the device.
                  continue;
              }
@@ -80,7 +80,7 @@ index 686389495..1acaea3cf 100644
          }
  
          int retry_count = 2;
-@@ -2123,7 +2146,7 @@ bool fs_mgr_swapon_all(const Fstab& fstab) {
+@@ -2125,7 +2148,7 @@ bool fs_mgr_swapon_all(const Fstab& fstab) {
  }
  
  bool fs_mgr_is_verity_enabled(const FstabEntry& entry) {
@@ -89,7 +89,7 @@ index 686389495..1acaea3cf 100644
          return false;
      }
  
-@@ -2134,12 +2157,17 @@ bool fs_mgr_is_verity_enabled(const FstabEntry& entry) {
+@@ -2136,12 +2159,17 @@ bool fs_mgr_is_verity_enabled(const FstabEntry& entry) {
          return false;
      }
  
@@ -109,7 +109,7 @@ index 686389495..1acaea3cf 100644
      if (*status == 'C' || *status == 'V') {
          return true;
      }
-@@ -2148,7 +2176,7 @@ bool fs_mgr_is_verity_enabled(const FstabEntry& entry) {
+@@ -2150,7 +2178,7 @@ bool fs_mgr_is_verity_enabled(const FstabEntry& entry) {
  }
  
  std::optional<HashtreeInfo> fs_mgr_get_hashtree_info(const android::fs_mgr::FstabEntry& entry) {
@@ -118,7 +118,7 @@ index 686389495..1acaea3cf 100644
          return {};
      }
      DeviceMapper& dm = DeviceMapper::Instance();
-@@ -2184,7 +2212,7 @@ std::optional<HashtreeInfo> fs_mgr_get_hashtree_info(const android::fs_mgr::Fsta
+@@ -2186,7 +2214,7 @@ std::optional<HashtreeInfo> fs_mgr_get_hashtree_info(const android::fs_mgr::Fsta
  }
  
  bool fs_mgr_verity_is_check_at_most_once(const android::fs_mgr::FstabEntry& entry) {
@@ -127,7 +127,7 @@ index 686389495..1acaea3cf 100644
          return false;
      }
  
-@@ -2323,22 +2351,3 @@ bool fs_mgr_mount_overlayfs_fstab_entry(const FstabEntry& entry) {
+@@ -2325,22 +2353,3 @@ bool fs_mgr_mount_overlayfs_fstab_entry(const FstabEntry& entry) {
      LINFO << report << ret;
      return true;
  }
@@ -151,7 +151,7 @@ index 686389495..1acaea3cf 100644
 -    return true;
 -}
 diff --git a/fs_mgr/fs_mgr_fstab.cpp b/fs_mgr/fs_mgr_fstab.cpp
-index 8c719c868..9c77299a6 100644
+index fc200b2d55..2933b61f8c 100644
 --- a/fs_mgr/fs_mgr_fstab.cpp
 +++ b/fs_mgr/fs_mgr_fstab.cpp
 @@ -167,10 +167,12 @@ bool ParseFsMgrFlags(const std::string& flags, FstabEntry* entry) {
@@ -169,7 +169,7 @@ index 8c719c868..9c77299a6 100644
          CheckFlag("logical", logical);
 diff --git a/fs_mgr/fs_mgr_verity.cpp b/fs_mgr/fs_mgr_verity.cpp
 new file mode 100644
-index 000000000..efa218078
+index 0000000000..efa2180787
 --- /dev/null
 +++ b/fs_mgr/fs_mgr_verity.cpp
 @@ -0,0 +1,557 @@
@@ -731,7 +731,7 @@ index 000000000..efa218078
 +    return true;
 +}
 diff --git a/fs_mgr/include_fstab/fstab/fstab.h b/fs_mgr/include_fstab/fstab/fstab.h
-index f26fb245a..d0b93a8a3 100644
+index ee1ff58bdb..20656d1a19 100644
 --- a/fs_mgr/include_fstab/fstab/fstab.h
 +++ b/fs_mgr/include_fstab/fstab/fstab.h
 @@ -63,6 +63,7 @@ struct FstabEntry {
@@ -751,7 +751,7 @@ index f26fb245a..d0b93a8a3 100644
          bool avb : 1;
          bool logical : 1;
 diff --git a/fs_mgr/tests/fs_mgr_test.cpp b/fs_mgr/tests/fs_mgr_test.cpp
-index 6c881c0bf..d029fd441 100644
+index 6c881c0bf4..d029fd4417 100644
 --- a/fs_mgr/tests/fs_mgr_test.cpp
 +++ b/fs_mgr/tests/fs_mgr_test.cpp
 @@ -192,6 +192,7 @@ bool CompareFlags(FstabEntry::FsMgrFlags& lhs, FstabEntry::FsMgrFlags& rhs) {
@@ -789,7 +789,7 @@ index 6c881c0bf..d029fd441 100644
      }
  
 diff --git a/init/first_stage_mount.cpp b/init/first_stage_mount.cpp
-index 6dfa275e4..a25516bb6 100644
+index 6dfa275e48..a25516bb60 100644
 --- a/init/first_stage_mount.cpp
 +++ b/init/first_stage_mount.cpp
 @@ -81,7 +81,8 @@ class FirstStageMount {
@@ -899,7 +899,7 @@ index 6dfa275e4..a25516bb6 100644
  // for any further vbmeta partitions.
  FirstStageMountVBootV2::FirstStageMountVBootV2(Fstab fstab)
 diff --git a/set-verity-state/set-verity-state.cpp b/set-verity-state/set-verity-state.cpp
-index 52a7f7473..0a26abaa2 100644
+index 52a7f74730..0a26abaa27 100644
 --- a/set-verity-state/set-verity-state.cpp
 +++ b/set-verity-state/set-verity-state.cpp
 @@ -244,6 +244,25 @@ int main(int argc, char* argv[]) {
@@ -929,5 +929,5 @@ index 52a7f7473..0a26abaa2 100644
    if (!any_changed) any_changed = overlayfs_setup(enable);
  
 -- 
-2.25.1
+2.17.1
 
